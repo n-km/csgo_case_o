@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS:GO Case Opener</title>
+    <style>
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          text-align: center;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          height: 100vh;
+          transition: background-color 0.5s;
+        }
+
+        #points-container {
+          width: 30%;
+          padding: 20px;
+          background-color: #fff;
+          border-radius: 15px;
+          box-shadow: 0 0 20px rgba(97, 218, 251, 0.5);
+        }
+
+        #points-container h2 {
+          font-size: 1.5em;
+          margin-bottom: 10px;
+        }
+
+        #points-container button {
+          width: 100%;
+          height: 50px;
+          font-size: 16px;
+          cursor: pointer;
+          background-color: #61dafb;
+          color: #fff;
+          border: none;
+          border-radius: 5px;
+          transition: background-color 0.3s;
+        }
+
+        #points-container button:hover {
+          background-color: #4fa3cc;
+        }
+
+        #points {
+          font-size: 1.2em;
+          margin-top: 10px;
+        }
+
+        #case {
+          width: 50%;
+          height: 300px;
+          border: 5px solid #61dafb;
+          margin: 20px;
+          padding: 10px;
+          position: relative;
+          overflow: hidden;
+          background: #fff;
+          border-radius: 15px;
+          box-shadow: 0 0 20px rgba(97, 218, 251, 0.5);
+          transition: box-shadow 0.3s;
+        }
+
+        #case:hover {
+          box-shadow: 0 0 40px rgba(97, 218, 251, 0.8);
+        }
+
+        #case img {
+          width: 30%;
+          height: 150px;
+          display: block;
+          margin: 0 auto;
+          transition: transform 0.1s;
+        }
+
+        #case.opened img {
+          animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+          20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        #case:hover img {
+          transform: scale(1.1);
+        }
+
+        #case button {
+          margin-top: 10px;
+          padding: 10px 20px;
+          font-size: 18px;
+          cursor: pointer;
+          background-color: #61dafb;
+          color: #fff;
+          border: none;
+          border-radius: 5px;
+          transition: background-color 0.3s;
+        }
+
+        #case button:hover {
+          background-color: #4fa3cc;
+        }
+
+        #result {
+  margin-top: 20px;
+  font-weight: bold;
+  font-size: 1.2em;
+  overflow: hidden; /* Hinzufügen, um das Überlaufen von Bildern zu verhindern */
+}
+
+#result .item-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#result .item-img {
+  width: 100px; /* Oder eine andere geeignete Breite, um die Bilder vollständig sichtbar zu machen */
+  height: 100px; /* Oder eine andere geeignete Höhe */
+  border-radius: 5px;
+  object-fit: contain;
+}
+
+        #inventory-modal {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.8);
+          justify-content: center;
+          align-items: center;
+          z-index: 999;
+        }
+
+        #inventory-content {
+          background: #2d2d2d;
+          padding: 20px;
+          border-radius: 10px;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+          max-width: 500px;
+          width: 100%;
+          text-align: left;
+          color: #fff;
+          overflow-y: auto;
+          max-height: 80vh;
+        }
+
+        #close-inventory {
+          color: #fff;
+          font-size: 24px;
+          cursor: pointer;
+        }
+
+        #inventory-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+
+        #inventory-list li {
+          margin-bottom: 15px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+       .item-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  overflow: hidden; /* Füge diese Zeile hinzu */
+}
+
+.item-img {
+  width: 100px; /* Erhöhe die Breite der Bilder auf 100px */
+  height: 100px; /* Erhöhe die Höhe der Bilder auf 100px */
+  border-radius: 5px;
+  object-fit: contain; /* Ändere object-fit zu "contain" */
+  object-position: center; /* Füge object-position hinzu und setze es auf "center" */
+}
+
+
+
+    .item-info {
+      flex-grow: 1;
+      margin-right: 15px;
+      color: #fff;
+    }
+
+    .sell-button {
+      cursor: pointer;
+      background-color: #ff4040;
+      color: #fff;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+
+    .sell-button:hover {
+      background-color: #e63939;
+    }
+
+        #mode-switch {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          cursor: pointer;
+          background-color: #61dafb;
+          color: #fff;
+          padding: 10px;
+          border-radius: 5px;
+          font-size: 16px;
+          transition: background-color 0.3s;
+        }
+
+        #mode-switch:hover {
+          background-color: #4fa3cc;
+        }
+
+        body.dark-mode {
+          background-color: #1a1a1a;
+          color: #ddd;
+        }
+
+        body.dark-mode #points-container {
+          background-color: #333;
+          color: #fff;
+        }
+
+        body.dark-mode #case {
+          border: 5px solid #1a1a1a;
+          background: #333;
+          box-shadow: 0 0 20px rgba(97, 218, 251, 0.5);
+        }
+
+        body.dark-mode #case.opened img {
+          box-shadow: 0 0 20px rgba(97, 218, 251, 0.5);
+        }
+
+        body.dark-mode #case:hover {
+          box-shadow: 0 0 40px rgba(97, 218, 251, 0.8);
+        }
+
+        body.dark-mode #case button {
+          background-color: #1a1a1a;
+          color: #ddd;
+        }
+
+        body.dark-mode #case button:hover {
+          background-color: #333;
+        }
+
+        body.dark-mode #result {
+          color: #ddd;
+        }
+
+        body.dark-mode #inventory-content {
+          background: #1a1a1a;
+          color: #ddd;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+        }
+
+        body.dark-mode #inventory-list li {
+          background: #333;
+          padding: 10px;
+          border-radius: 5px;
+        }
+
+        body.dark-mode #inventory-list li .item-info {
+          color: #ddd;
+        }
+
+        body.dark-mode #inventory-list li .sell-button {
+          background-color: #ff6666;
+        }
+
+        body.dark-mode #mode-switch {
+          background-color: #61dafb;
+          color: #fff;
+        }
+
+        body.dark-mode #mode-switch:hover {
+          background-color: #4fa3cc;
+        }
+    </style>
+</head>
+<body>
+<div id="points-container">
+    <h2>Tippen, um Punkte zu erhalten</h2>
+    <button onclick="earnPoints()">Punkt verdienen</button>
+    <p id="points">Punkte: 0</p>
+    <button onclick="openInventory()">Inventar anzeigen</button>
+</div>
+<div id="case">
+    <img src="https://www.90skins.com/base/media/cases/7_h8mO0J0.png" alt="CS:GO Case">
+    <br>
+    <button onclick="openCase()">Case öffnen (50 Punkte)</button>
+    <div id="result" class="item-container"></div>
+</div>
+
+<div id="inventory-modal">
+    <div id="inventory-content">
+        <span id="close-inventory" onclick="closeInventory()">✕</span>
+        <h2>Dein Inventar</h2>
+        <ul id="inventory-list"></ul>
+    </div>
+</div>
+
+<div id="mode-switch" onclick="toggleDarkMode()">Dark Mode</div>
+
+<script>
+    var points = 0;
+    var inventory = [];
+
+    function earnPoints() {
+      points++;
+      document.getElementById("points").innerText = "Punkte: " + points;
+    }
+
+    function openCase() {
+      if (points >= 50) {
+        points -= 50;
+        document.getElementById("points").innerText = "Punkte: " + points;
+
+        var items = ["AWP Dragon Lore", "Karambit Fade", "M4A4 Howl", "Gut Knife Doppler", "StatTrak AK-47 Fire Serpent"];
+        var randomIndex = Math.floor(Math.random() * items.length);
+        var selectedItem = items[randomIndex];
+
+        inventory.push(selectedItem);
+
+        document.getElementById("result").innerHTML = `
+          <img src="${getImageUrl(selectedItem)}" alt="${selectedItem}" class="item-img">
+          Du hast erhalten: ${selectedItem}
+        `;
+
+        var caseElement = document.getElementById("case");
+        caseElement.classList.add("opened");
+
+        // Reset the opened class after the shake animation duration
+        setTimeout(function() {
+          caseElement.classList.remove("opened");
+        }, 500);
+      } else {
+        alert("Du hast nicht genügend Punkte. Tippe, um mehr Punkte zu erhalten!");
+      }
+    }
+
+    // Hier ist die Funktion getImageUrl
+    function getImageUrl(item) {
+      switch (item) {
+        case "AWP Dragon Lore":
+          return "https://csgostash.com/storage/img/skin_sideview/s422.png?id=d0f53fa10778853316e9";
+        case "Karambit Fade":
+          return "https://www.pngkit.com/png/full/149-1499050_csgo-knife-png.png";
+        case "M4A4 Howl":
+          return "https://www.csgowallpapers.com/assets/images/original/mossawi_700890109408_20160327010930_482644214760.png";
+        case "Gut Knife Doppler":
+          return "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpovbSsLQJf1ObcTjxP09u3mY2KqPP7I6vdk3lu-M1wmeyTyoD8j1yg5RZrazv1J9fGJgRvNF_W_Afolefs0Z6_uJSaznM36yInt3rbnRW-iB9SLrs4UCqX9kU";
+        case "StatTrak AK-47 Fire Serpent":
+          return "https://image.lag.vn/upload/news/17/12/07/s114-1512617610588_DVAL.png";
+        default:
+          return "";
+      }
+    }
+
+    function openInventory() {
+      var inventoryList = document.getElementById("inventory-list");
+      inventoryList.innerHTML = "";
+
+      for (var i = 0; i < inventory.length; i++) {
+        var item = inventory[i];
+        var listItem = document.createElement("li");
+        listItem.className = "inventory-item";
+        listItem.innerHTML = `
+          <div class="item-container">
+            <img src="${getImageUrl(item)}" alt="${item}" class="item-img">
+            <div class="item-info">${item}</div>
+            <button class="sell-button" onclick="sellItem(${i})">Verkaufen (25 Punkte)</button>
+          </div>
+        `;
+        inventoryList.appendChild(listItem);
+      }
+
+      document.getElementById("inventory-modal").style.display = "flex";
+    }
+
+    function closeInventory() {
+      document.getElementById("inventory-modal").style.display = "none";
+    }
+
+    function sellItem(index) {
+      var sellingPrice = 25;
+      points += sellingPrice;
+      inventory.splice(index, 1);
+      openInventory();
+      document.getElementById("points").innerText = "Punkte: " + points;
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+    }
+</script>
+</body>
+</html>
