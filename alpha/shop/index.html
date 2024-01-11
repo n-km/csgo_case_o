@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>csgo---XaseOpener</title>
+    <style>
+
+        body{
+    font-family: arial;
+    background-color: #444;
+}
+.navigation button{
+    cursor: pointer;
+    border-width: 2px;
+    border-color: transparent;
+    border-style: double;
+    border-radius: 3px;
+    padding: 5px;
+    background-color: transparent;
+    transition: 0.2s;
+    color: white;
+}
+.navigation button:hover {
+    border-color: white;            
+}
+h1 {
+    color: white;
+}
+h2 {
+    color: white;
+}
+form {
+    display: contents;
+}
+.general {
+    width: max-content;
+}
+.activity {
+    width: 100%;
+    background-color: #757575;
+    border-radius: 5px;
+}
+.activity p {
+    color: white;
+}
+.active-site {
+    text-decoration: underline;
+}
+.news {
+    transform: rotate(-20deg);
+    position: fixed;
+    left: 20;
+    top: 20;
+    
+}
+.news button {
+    background-color: white;
+    color: #444;
+    border-width: 1px;
+    border-color: transparent;
+    border-style: double;
+    border-radius: 3px;
+    transition: 0.1s;
+    cursor: pointer;
+    padding: 5px;
+}
+.news button:hover {
+    border-color: white;
+    box-shadow:  0 0 8px white;  
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="news">
+       <form action="/csgo_case_o/alpha/index.html"><button>The latest News</button></form>
+    </div>
+    <center>
+    <div class="general">
+        <div class="navigation">
+            <h1>XaseOpener</h1>
+            <br>
+            <form action="/csgo_case_o/alpha/profil"><button>View Profil</button></form>
+            <form action="/csgo_case_o/alpha/overview"><button>Overview</button></form>
+            <form action="/csgo_case_o/alpha/get-weapons"><button>Get Points</button></form>
+            <form action="/csgo_case_o/alpha/inventory"><button>Inventory</button></form>
+            <form action="/csgo_case_o/alpha/shop"><button class="active-site" disabled="disabled">Shop</button></form>
+        </div>
+        <div class="activity">
+            <h2 class="text-rainbow-animation">Shop</h2>
+            <p>Here can you buy weapons or CSGO-Cases.</p>
+        </div>
+    </div>
+    </center>
+</body>
+</html>
